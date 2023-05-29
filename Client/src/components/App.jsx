@@ -22,8 +22,10 @@ export default function App() {
 
   const handleSub = (e) => {
     e.preventDefault();
-    var input = e.target.querySelector('.input').value;
-    setMyMessage(input)
+    const input = e.target.querySelector('.input');
+    const inputVal = input.value;
+    setMyMessage(inputVal)
+    input.value = '';
   }
 
   var count = 0;

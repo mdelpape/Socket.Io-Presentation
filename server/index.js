@@ -1,16 +1,19 @@
 require('dotenv').config();
+const { instrument } = require('@socket.io/admin-ui')
 const path = require('path');
 const io = require('socket.io')(3000, {
   cors: {
-    origin: ["http://localhost:8080",
-    "http://localhost:3000"
-  ],
+    origin: ['http://localhost:8080', 'http://localhost:3000', 'https://admin.socket.io'],
+    methods: ['GET', 'POST'],
+    allowedHeaders: ['Content-Type'],
+    credentials: true,
   }
   });
 
 const messages = [];
 
 io.on('connection', socket => {
+  io.emit('recieve-messages', messages)
   socket.on('send-message', message => {
     messages.push(message)
     io.emit('recieve-messages', messages)
@@ -37,3 +40,5 @@ const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => {
   console.log(`Server available at http://localhost${PORT}`);
 });
+
+instrument(io, {auth: false})
